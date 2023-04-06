@@ -6,7 +6,7 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Dotnet build
       run: dotnet build --configuration Release
@@ -25,3 +25,19 @@ jobs:
     - name: Typescript test
       run: npm run test
       working-directory: ./DotnetTemplate.Web
+
+  docker:
+    name: Build and push docker images
+    needs: "build"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: docker build --tag {{secrets.DOCKERHUB_USERNAME}}/dotnettemplate .
+    
+    - name: Login to Docker Hub
+      run: docker login -u {{secrets.DOCKERHUB_USERNAME}} -p {{secrets.DOCKERHUB_PASSWORD}}
+
+    - name: Push Docker image
+      run: docker push {{secrets.DOCKERHUB_USERNAME}}/dotnettemplate
