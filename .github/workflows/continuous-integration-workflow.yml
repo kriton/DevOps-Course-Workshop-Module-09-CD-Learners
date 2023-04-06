@@ -48,4 +48,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: WebHook to deploy into Azure
-      run: curl -X POST "${{ secrets.AZURE_WEBHOOK }}"
+      run: curl -dH --fail -X POST "${{ secrets.AZURE_WEBHOOK }}"
