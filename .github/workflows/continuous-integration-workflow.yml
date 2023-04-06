@@ -41,3 +41,11 @@ jobs:
 
     - name: Push Docker image
       run: docker push pilavid/dotnettemplate
+  
+  azure:
+    name: Deploy to Azure
+    needs: "docker"
+    runs-on: ubuntu-latest
+    steps:
+    - name: WebHook to deploy into Azure
+      run: curl -X POST "${{ secrets.AZURE_WEBHOOK }}"
