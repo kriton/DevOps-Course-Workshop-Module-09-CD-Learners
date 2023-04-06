@@ -12,21 +12,22 @@ COPY . /app/
 #Build
 RUN dotnet build
 
-WORKDIR /app/DotnetTemplate.Web
-RUN npm install && npm run build
+# WORKDIR /app/DotnetTemplate.Web
+# RUN npm install
 
 #Test
-WORKDIR /app
+# WORKDIR /app
 RUN dotnet test
 
-WORKDIR /app/DotnetTemplate.Web
-RUN npm t
+# WORKDIR /app/DotnetTemplate.Web
+# RUN npm t
 
-WORKDIR /app/DotnetTemplate.Web
-RUN cd /app/DotnetTemplate.Web && npm run lint
+# WORKDIR /app/DotnetTemplate.Web
+# RUN cd /app/DotnetTemplate.Web && npm run lint
 
+RUN dotnet publish --use-current-runtime --self-contained false -o /app/build
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=build-stage /app .
-CMD ["dotnet","run"]
+COPY --from=build-stage /app/build .
+CMD ["dotnet","DotnetTemplate.Web.dll"]
