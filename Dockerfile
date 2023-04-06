@@ -28,5 +28,5 @@ RUN cd /app/DotnetTemplate.Web && npm run lint
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build-stage /app .
 CMD ["dotnet","run"]
