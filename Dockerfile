@@ -1,5 +1,5 @@
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-stage
 
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - &&\
     apt-get install -y nodejs
@@ -25,6 +25,8 @@ RUN npm t
 WORKDIR /app/DotnetTemplate.Web
 RUN cd /app/DotnetTemplate.Web && npm run lint
 
-EXPOSE 5000
 
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build /app .
 CMD ["dotnet","run"]
